@@ -1,4 +1,5 @@
 GLockers::Application.routes.draw do
+  devise_for :users
   root :to => "pages#index"
   post "api/DoorOpened(.:format)" => "api#DoorOpened"
   post "api/DropOff(.:format)"
