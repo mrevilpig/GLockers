@@ -1,0 +1,86 @@
+<div class="alert alert-success alert-dismissable notice-div">
+  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+  <p><%= notice %></p>
+</div>
+
+<h4>Boxes</h4>
+
+<b>Branch:</b> <%= @locker.branch.name %><br/> 
+<b>Locker:</b> <%= @locker.name %> <br/>
+<%= link_to 'Back to Lockers', lockers_path %>
+
+<table class='table table-center'>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Size</th>
+      <th>Status</th>
+      <th>Package</th>
+      <th>Backup</th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @locker.boxes.each do |box| %>
+      <tr class='
+        <% if box.print_status == 'Delivering' or box.print_status == 'Delivered' or box.print_status == 'Returning' or box.print_status == 'Returned' %>
+      	  <%= 'alert alert-success' %>
+      	<% elsif box.print_status == 'Error' %>
+      	  <%= 'alert alert-danger' %>
+      	<% end %>
+      	'>
+        <td><%= box.name %></td>
+        <td><%= box.print_size %></td>
+        <td><%= box.print_status %></td>
+        <td><% if box.package %>
+        	  <%= box.package.barcode %>
+        	<% else %>
+        	  <%=link_to content_tag(:span, '', :class => 'glyphicon glyphicon-paperclip') + ' Assign',  '', "data-toggle"=>"modal", "data-target"=>'#myModal-assign', "box-id"=>box.id.to_s, :class => 'btn btn-default btn-xs modal-trigger' %>
+        	<% end %>
+        </td>
+        <td><% if box.backup_package %>
+        	  <%= box.backup_package.barcode %>
+        	<% elsif box.print_status != 'Returned' %>
+        	  <%= '-' %>
+        	<% else %>
+        	  <%=link_to content_tag(:span, '', :class => 'glyphicon glyphicon-paperclip') + ' Assign',  '', "data-toggle"=>"modal", "data-target"=>'#myModal-backup', "box-id"=>box.id.to_s, :class => 'btn btn-default btn-xs modal-backup-trigger' %>
+        	<% end %>
+        </td>
+        <td>
+	        <%=link_to content_tag(:span, '', :class => 'glyphicon glyphicon-wrench') + ' Manage', box, :class => 'btn btn-default btn-xs' %> 
+	        <%=link_to content_tag(:span, '', :class => 'glyphicon glyphicon-list-alt') + ' Logs', '', "data-toggle"=>"modal", "data-target"=>'#myModal-logs', "box-id"=>box.id.to_s, :class => 'btn btn-default btn-xs modal-box-logs-trigger' %> 
+	        <%=link_to content_tag(:span, '', :class => 'glyphicon glyphicon-pencil') + ' Edit', edit_box_path(box), :class => 'btn btn-default btn-xs' %> 
+	        <%=link_to content_tag(:span, '', :class => 'glyphicon glyphicon-trash') + ' Delete', box, method: :delete, data: { confirm: 'Are you sure?' } , :class => 'btn btn-default btn-xs' %>
+	    </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+	<div class="modal fade modal-assign" id="myModal-assign" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	  <div class="modal-dialog">
+	    <div class="modal-content">
+	      <%= render 'formassign' %>
+	    </div>
+	  </div>
+	</div>
+	
+    <div class="modal fade modal-backup" id="myModal-backup" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	  <div class="modal-dialog">
+	    <div class="modal-content">
+		  <%= render 'formbackup'%>
+	    </div>
+	  </div>
+	</div>
+	
+	<div class="modal fade modal-backup" id="myModal-logs" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	  <div class="modal-dialog">
+	    <div class="modal-content">
+	      <%= render 'tablelog' %>
+		</div>
+	  </div>
+	</div>
+<br>
+
+<%= link_to 'New Box', new_box_path %>

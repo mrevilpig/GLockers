@@ -1,0 +1,71 @@
+<h4>Packages</h4>
+
+<%= link_to content_tag( :span, "", :class=>"glyphicon glyphicon-plus") + ' New Package', '', "data-toggle"=>"modal", "data-target"=>'#myModal-new-package'  %>
+
+<br/><br/>
+<ul class="nav nav-tabs">
+  <li class="active"><a href="#delivery" data-toggle="tab">Delivery</a></li>
+  <li><a href="#dropoff" data-toggle="tab">Drop off</a></li>
+</ul>
+<div class="tab-content">
+  <div class="tab-pane active" id="delivery">
+	<table class='table table-hover'>
+	  <thead><tr><th colspan='8'><h5>Packages to Be Processed (<%= @packages.select{|p| p.status==@constant['PACKAGE_WAITING_FOR_DELIVERY'] }.size %>)</h5></th></tr></thead>
+	  <% @selected_packages = @packages.select{|p| p.status==@constant['PACKAGE_WAITING_FOR_DELIVERY'] } %>
+	  <%= render 'tablecontent' %>
+
+	  <thead><tr><th colspan='8'><h5>Packages Being Processed (<%= @packages.select{|p| p.status==@constant['PACKAGE_ENROUTE_DELIVERY'] or p.status==@constant['PACKAGE_QUEUING_DELIVERY'] or p.status==@constant['PACKAGE_DELIVERED_DELIVERY'] }.size %>)</h5></th></tr></thead>
+	  <% @selected_packages = @packages.select{|p| p.status==@constant['PACKAGE_ENROUTE_DELIVERY'] or p.status==@constant['PACKAGE_QUEUING_DELIVERY'] or p.status==@constant['PACKAGE_DELIVERED_DELIVERY'] } %>
+	  <%= render 'tablecontent' %>
+
+	  <thead><tr><th colspan='8'><h5>Packages Already Processed (<%= @packages.select{|p| p.status==@constant['PACKAGE_DONE_DELIVERY'] }.size %>)</h5></th></tr></thead>
+	  <% @selected_packages = @packages.select{|p| p.status==@constant['PACKAGE_DONE_DELIVERY'] } %>
+	  <%= render 'tablecontent' %>
+	</table>
+  </div>
+  <div class="tab-pane" id="dropoff">
+  	<table class='table table-hover'>
+	  <thead><tr><th colspan='8'><h5>Packages to Be Processed (<%= @packages.select{|p| p.status==@constant['PACKAGE_WAITING_FOR_DROP_OFF'] }.size %>)</h5></th></tr></thead>
+	  <% @selected_packages = @packages.select{|p| p.status==@constant['PACKAGE_WAITING_FOR_DROP_OFF'] } %>
+	  <%= render 'tablecontent' %>
+
+	  <thead><tr><th colspan='8'><h5>Packages Being Processed (<%= @packages.select{|p| p.status == @constant['PACKAGE_ENROUTE_DROP_OFF'] or p.status == @constant['PACKAGE_DROPPED_OFF_DROP_OFF'] }.size %>)</h5></th></tr></thead>
+	  <% @selected_packages = @packages.select{|p| p.status == @constant['PACKAGE_ENROUTE_DROP_OFF'] or p.status == @constant['PACKAGE_DROPPED_OFF_DROP_OFF']} %>
+	  <%= render 'tablecontent' %>
+
+	  <thead><tr><th colspan='8'><h5>Packages Already Processed (<%= @packages.select{|p| p.status==@constant['PACKAGE_DONE_DROP_OFF'] }.size %>)</h5></th></tr></thead>
+	  <% @selected_packages = @packages.select{|p| p.status==@constant['PACKAGE_DONE_DROP_OFF'] } %>
+	  <%= render 'tablecontent' %>
+	</table>
+  </div>
+</div>
+
+
+<br>
+
+    <div class="modal fade" id="myModal-new-package" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	  <div class="modal-dialog">
+	    <div class="modal-content">
+	    	<%= render 'formnew' %>
+	    </div>
+	  </div>
+	</div>
+
+    <div class="modal fade" id="myModal-assign" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	  <div class="modal-dialog">
+	    <div class="modal-content">
+	      <%= render 'formassign' %>
+	    </div>
+	  </div>
+	</div>
+
+	<div class="modal fade" id="myModal-logs" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	  <div class="modal-dialog">
+	    <div class="modal-content">
+	      <%= render 'tablelog' %>
+	    </div>
+	  </div>
+	</div>
+
+
+	</div>

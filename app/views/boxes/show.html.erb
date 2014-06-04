@@ -1,0 +1,126 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Branch:</strong>
+  <%= @box.branch.name %>
+</p>
+
+<p>
+  <strong>Locker:</strong>
+  <%= @box.locker.name %>
+</p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @box.name %>
+</p>
+
+<p>
+  <strong>Size:</strong>
+  <%= @box.print_size %>
+</p>
+
+<p>
+  <strong>Status:</strong>
+  <%= @box.print_status %>
+</p>
+
+<p>
+  <strong>Current Assigned Package:</strong>
+  ID: <%= @box.package.id if @box.package %> | 
+  Barcode: <%= @box.package.barcode if @box.package %>
+  <br />
+ 
+  <% if @box.status == @constant['BOX_DELIVERING'] %>
+  	<%= form_tag("delivered", method: "post") do %>
+  	  <%= submit_tag 'Delivered'%>
+  	  <%= hidden_field_tag :id, @box.id %>
+  	<% end %>
+  <% end %>
+  
+  <% if @box.status == @constant['BOX_DELIVERED'] %>
+  	<%= form_tag("picked_up", method: "post") do %>
+  	  <%= submit_tag 'Picked Up'%>
+  	  <%= hidden_field_tag :id, @box.id %>
+  	<% end %>
+  <% end %>
+  
+  <% if @box.status == @constant['BOX_RETURNING'] %>
+    <%= form_tag("dropped_off", method: "post") do %>
+      <%= submit_tag 'Dropped off' %>
+      <%= hidden_field_tag :id, @box.id %>
+    <% end %>
+  <% end %>
+  
+  <% if @box.status == @constant['BOX_RETURNED'] %>
+  	<%= form_tag("received", method: "post") do %>
+  	  <%= submit_tag 'Received'%>
+  	  <%= hidden_field_tag :id, @box.id %>
+  	<% end %>
+  <% end %>
+  
+  <% if (@box.package.nil? and @box.status == @constant['BOX_IDLE']) or @box.status == @constant['BOX_DELIVERING'] or @box.status == @constant['BOX_RETURNING'] %>
+  	<% if (@box.package.nil? and @box.status == @constant['BOX_IDLE']) %>
+  	  Assign Package: 
+  	<% else %>
+  	  Reassign Package:
+  	<% end %>
+  	<%= form_tag("assign", method: "post") do %>
+  	  <%= select '', :package_id, @unassigned_packages.collect{|p|
+	  	  	print_info = p.barcode
+	  	  	if p.status == '5'
+	  	  	  print_info = print_info + '(DropOff)'
+	  	  	end
+	  	  	[print_info, p.id]
+  	      }, include_blank: 'No/Cancel Assignment' %>
+  	  <%= submit_tag 'Assign' %>
+  	  <%= hidden_field_tag :id, @box.id %>
+  	<% end %>
+  <% end %>
+  
+</p>
+
+<p>
+  <strong>Access:</strong>
+  Pin: <%= @box.access.pin if @box.access %> | 
+  Barcode: <%= @box.access.barcode if @box.access %>
+</p>
+
+<% if @box.status == @constant['BOX_RETURNED'] %>
+  <p>
+    <strong>Backup Package for Delivery:</strong><br/>
+    <% if @selected_backup_package %>
+      Current Backed up Package: 
+      <%= @selected_backup_package.barcode %>
+    <% end %>
+    <%= form_tag("assign_backup", method: "post") do %>
+  	  <%= select '', :package_id, @unassigned_packages_for_delivery.collect{|p|
+	  	  	print_info = p.barcode
+	  	  	[print_info, p.id]
+  	      }, include_blank: 'No/Cancel Assignment' %>
+  	  <%= submit_tag 'Assign Backup' %>
+  	  <%= hidden_field_tag :id, @box.id %>
+  	<% end %>
+  </p>
+<% end %>
+
+<p>
+  <strong>Permission:</strong>
+  Employees: 
+  <% if @box.permissions %>
+	<% @box.permissions.each do |p| %>
+	  <%= p.employee.name %>
+	<% end %>
+  <% end %>
+</p>
+
+<p>
+  <strong>Remote open:</strong>
+  <%= link_to 'Open', open_box_path(@box), method: :post %>
+</p>
+
+<%= link_to 'Edit', edit_box_path(@box) %> |
+<%= link_to 'Back', locker_path(@box.locker) %>
+
+
+
