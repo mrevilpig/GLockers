@@ -7,7 +7,8 @@ body{
 }
 #header{
 	background-color: #edf4f8;
-	padding-bottom:10px;
+	padding-bottom:0px;
+	border-style: hidden;
 }
 #content{
 	margin: 20px 0;
