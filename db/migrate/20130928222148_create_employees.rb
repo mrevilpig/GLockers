@@ -6,7 +6,7 @@ class CreateEmployees < ActiveRecord::Migration
       t.string :middle_name
       t.string :mobile_phone
       t.string :email
-      t.string :user_name
+      t.string :username
       t.integer :role
       t.string :password
 

@@ -3,11 +3,11 @@ class Logging < ActiveRecord::Base
   belongs_to :employee
   belongs_to :package
   CONSTANT = YAML.load_file("config/constant.yml")
-  
+
   def self.log_action params, box, package, action_type
     owo = params[:occupied_when_open] ? 1:0
     owc = params[:occupied_when_close] ? 1:0
-    to = params[:timestamp_open].nil? ? nil : Time.parse(params[:timestamp_open]) 
+    to = params[:timestamp_open].nil? ? nil : Time.parse(params[:timestamp_open])
     tc = params[:timestamp_close].nil? ? nil : Time.parse(params[:timestamp_close])
     eid = params[:staff_id].nil? ? nil : params[:staff_id].to_i
     if action_type == CONSTANT['ACTION_FIX']
@@ -23,14 +23,14 @@ class Logging < ActiveRecord::Base
     t = Time.parse(params[:timestamp])
     p = {
                 open_time: to, close_time: tc, request_time: t,
-                employee_id: eid, log_type: params[:type], box_id: box.id, box_status: box.status, 
+                employee_id: eid, log_type: params[:type], box_id: box.id, box_status: box.status,
                 package_id: pid, package_status: pstatus, syntax_type: stype,
                 occupied_when_open: owo, occupied_when_close: owc, action_type: action_type
     }
     @logging = Logging.new(p)
     @logging.save!
   end
-  
+
   def self.log_manual_action box, package
     return false if package.nil?
     t = Time.now
@@ -97,7 +97,7 @@ class Logging < ActiveRecord::Base
     pstatus = package.status
     p = {
                 open_time: to, close_time: tc, request_time: t,
-                employee_id: eid, log_type: CONSTANT['LOG_TYPE_MANUAL'], box_id: bid, box_status: bstatus, 
+                employee_id: eid, log_type: CONSTANT['LOG_TYPE_MANUAL'], box_id: bid, box_status: bstatus,
                 package_id: pid, package_status: pstatus, syntax_type: stype,
                 occupied_when_open: owo, occupied_when_close: owc, action_type: CONSTANT['ACTION_MANUAL']
     }
@@ -105,11 +105,11 @@ class Logging < ActiveRecord::Base
     @logging = Logging.new(p)
     @logging.save!
   end
-  
+
   def show_access_method
     case self.log_type
     when 0
-      return "Pin" 
+      return "Pin"
     when 1
       return "Barcode"
     when 2
@@ -120,11 +120,11 @@ class Logging < ActiveRecord::Base
       return "Unknown"
     end
   end
-  
+
   def show_action_type
     case self.action_type
     when 0
-      return "Normal" 
+      return "Normal"
     when 1
       return "Abnormal"
     when 2
@@ -137,15 +137,15 @@ class Logging < ActiveRecord::Base
       return "Unknown"
     end
   end
-  
+
   def print_package_status
     case self.package_status
     when 0
       return "Delivery - New"
     when 1
-      return "Delivery - En Route" 
+      return "Delivery - En Route"
     when 2
-      return "Delivery - Delivered" 
+      return "Delivery - Delivered"
     when 3
       return "Delivery - Done"
     when 4
@@ -164,16 +164,16 @@ class Logging < ActiveRecord::Base
       return "Unknown"
     end
   end
-  
+
   def print_sentence
     case self.syntax_type
     when CONSTANT['SYNTAX_BOX_ACTION']
       type = self.print_package_status
       box = self.box.locker.name + '-' + self.box.name
       if self.log_type == '0'
-        person = 'user '+ self.box.user.user_name
+        person = 'user '+ self.box.user.username
       elsif self.employee
-        person = 'staff '+ self.employee.user_name
+        person = 'staff '+ self.employee.username
       else
         person = 'unknown user'
       end
@@ -202,7 +202,7 @@ class Logging < ActiveRecord::Base
         package_sentence = "Package #{barcode} was #{bool}#{action}."
         sentence = sentence + package_sentence
       end
-      
+
       return sentence
     when CONSTANT['SYNTAX_BOX_MANUAL_ACTION']
       type = self.print_package_status
@@ -222,7 +222,7 @@ class Logging < ActiveRecord::Base
       return sentence
     when CONSTANT['SYNTAX_BOX_FIX']
       if self.employee
-        person = 'staff '+ self.employee.user_name
+        person = 'staff '+ self.employee.username
       else
         person = 'unknown user'
       end

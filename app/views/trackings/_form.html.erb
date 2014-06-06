@@ -1,4 +1,4 @@
-<%= form_for(@tracking) do |f| %>
+<%= simple_form_for(@tracking) do |f| %>
   <% if @tracking.errors.any? %>
     <div id="error_explanation">
       <h2><%= pluralize(@tracking.errors.count, "error") %> prohibited this tracking from being saved:</h2>
@@ -12,26 +12,21 @@
   <% end %>
 
   <div class="field">
-    <%= f.label :package_id %><br>
-    <%= f.number_field :package_id %>
+    <%= f.input :package_id %>
   </div>
   <div class="field">
-    <%= f.label :employee_id %><br>
-    <%= f.number_field :employee_id %>
+    <%= f.input :employee_id %>
   </div>
   <div class="field">
-    <%= f.label :time %><br>
-    <%= f.datetime_select :time %>
+    <%= f.input :time %>
   </div>
   <div class="field">
-    <%= f.label :type %><br>
-    <%= f.text_field :type %>
+    <%= f.input :type %>
   </div>
   <div class="field">
-    <%= f.label :branch_id %><br>
-    <%= f.number_field :branch_id %>
+    <%= f.input :branch_id %>
   </div>
   <div class="actions">
-    <%= f.submit %>
+    <%= f.button :submit %>
   </div>
 <% end %>

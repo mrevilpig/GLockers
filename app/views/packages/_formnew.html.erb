@@ -19,7 +19,7 @@
 	<div class="col-lg-6">
 	  <div class="field">
 	    <%= f.label :user_id %><br>
-	    <%= f.collection_select :user_id, User.order(:last_name),:id,:user_name,{:include_blank => 'Select User'}, {:class=>'form-control'} %>
+	    <%= f.collection_select :user_id, User.order(:last_name),:id,:username,{:include_blank => 'Select User'}, {:class=>'form-control'} %>
 	  </div>
 	  <div class="field">
 	    <%= f.label :size %><br>

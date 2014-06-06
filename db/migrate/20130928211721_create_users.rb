@@ -13,7 +13,7 @@ class CreateUsers < ActiveRecord::Migration
       t.integer :state_id
       t.string :zip
       t.integer :preferred_branch_id
-      t.string :user_name
+      t.string :username
 
       t.timestamps
     end
