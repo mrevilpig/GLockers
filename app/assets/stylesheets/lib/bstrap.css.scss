@@ -13,15 +13,11 @@ html, body {
     margin: 0 auto -100px; /* the bottom margin is the negative value of the footer's height */
 }
 .footer, .push {
-    height: 25px; /* .push must be the same height as .footer */
-}
-
-.footer {
-  background-color: #edf4f8;
+    height: 47px; /* .push must be the same height as .footer */
 }
 
 .footer p{
-  color: #888888;
+  color: #ecf0f1;
 }
 
 .AbsoluteCenter {
