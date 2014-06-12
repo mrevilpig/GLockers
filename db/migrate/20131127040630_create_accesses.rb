@@ -4,7 +4,7 @@ class CreateAccesses < ActiveRecord::Migration
       t.integer :box_id
       t.string :barcode
       t.string :pin
-      t.string :update_request_id
+      t.integer :update_request_id
 
       t.timestamps
     end
