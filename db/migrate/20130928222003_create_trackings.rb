@@ -4,7 +4,7 @@ class CreateTrackings < ActiveRecord::Migration
       t.integer :package_id
       t.integer :employee_id
       t.datetime :time
-      t.binary :type
+      t.integer :type
       t.integer :branch_id
 
       t.timestamps
